@@ -10,6 +10,11 @@ import numpy as np
 from sklearn import datasets
 import matplotlib.pyplot as plt
 import seaborn as sns
+#%% 사이킷런 링 데이터
+df, y = datasets.make_circles(n_samples=400, factor=.1, noise=.1)
+N = df.shape[0]
+p = df.shape[1]
+plt.scatter(df[:,0], df[:,1])
 #%% get_centroid(weight)
 def get_centroid(weight, K):
     centroid = []
@@ -121,10 +126,26 @@ sns.pairplot(plot_df, hue='y')
 plt.scatter(df[:, 0], df[:, 1], c=y_pred)
 for k in range(K):
     plt.scatter(curr_centroid[k][0], curr_centroid[k][1], s=100)
-#%%
+    
+    
+#%% k한개돌릴때
 
 plt.scatter(df[:,0], df[:,1])
-K = 3
+K = 2
+m = 2
+epsilon = 0.05
+max_iter = 50
+y_pred, weight, curr_centroid = predict(df, K)
+
+
+
+
+
+
+#%% k 여러개 돌릴때
+
+plt.scatter(df[:,0], df[:,1])
+K = 2
 m = 2
 epsilon = 0.05
 max_iter = 50
@@ -135,6 +156,7 @@ for k in range(1, 10+1):
     y_pred, weight, curr_centroid = predict(df, K=k)
     ks.append(k)
     costs.append(get_cost(df, y_pred, curr_centroid))
+
 #%%
 plt.scatter(ks, costs)
 
