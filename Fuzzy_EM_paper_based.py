@@ -21,7 +21,7 @@ def normalize_data(df): ## data 정규화
     
     return norm_df
 
-
+ 
 def initial_centroid(df, n_cls): ## n_cls 개 만큼의 초기 random seeds 생성
     
     # n_rows = df.shape[0]
