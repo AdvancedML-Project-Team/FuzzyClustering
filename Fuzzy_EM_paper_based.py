@@ -75,28 +75,37 @@ def delelte_cluster(df, centroids, distance_array): ## 거리기반으로 cluste
 
     return new_centroids, new_labels
 
-def concat_cluster(centroids, thrs): ## 정해진 거리 만큼 가까이 있는 centroid 확인
-    result = []
+def concat_two(centroids): ## 가까이 있는 두개의 클러스터 concat
+    del_idx = []
     for i in range(len(centroids)):
-        tmp = {}
+        tmp = []
         for j, centroid in enumerate(centroids):
-            dist = np.linalg.norm(centroids[i]-centroid)
-            if dist < thrs:
-                tmp[j] = dist
-        result.append(tmp)
+            if i != j:
+                dist = np.linalg.norm(centroids[i]-centroid)
+                tmp.append(dist)
+        if min(tmp) < 1.5: ## 거리가 저정도되는 클러스터를 합치려고 하면 멈추게
+            del_ = np.argmin(tmp)
+            del_idx.append(del_)
+            centroids[del_] = centroids[i]
+        else:
+            break
     
-    change_dict= {}
-    for i, dict_ in enumerate(result):
-        del dict_[i]
-        change_dict[i] = list(dict_.keys())
+    cent_list = np.array(centroids.tolist())
     
+    new_centroids = np.delete(cent_list, del_idx, axis = 0)
     
-    return change_dict
-        
+    return new_centroids
 
-    
-        
-        
+def repeat(new_centroids): ## 두개씩 합치는거 반복 멈출때 concat_two() 함수의 조건 때문에 더이상 합치지 않을때까지
+    a = new_centroids
+    tmp=[]
+    while True:
+        a = concat_two(a)
+        tmp.append(len(a))
+        if len(a) == tmp[-1]:
+            break
+    return a
+         
 
 #%% main
 
@@ -108,13 +117,16 @@ distance_array =  distance_array_(norm_df, ini_cent)
 
 centroid_1st, update_labels = delelte_cluster(norm_df, ini_cent, distance_array)
 
-label_dict = Counter(update_labels)
+starting_centroid = concat_two(centroid_1st)
 
-re = concat_cluster(centroid_1st, 1)
+start_centroid = repeat(starting_centroid)
 
-print(distance_array)
+d =  distance_array_(norm_df, start_centroid)
+
+_, start_label = delelte_cluster(norm_df, start_centroid, d)
+
 print("초기 centroid 개수",len(ini_cent))
 print("빈거랑 별로 없는거 지우고 개수",len(centroid_1st))
-
-print(re)
+print("두개씩 다 합치고 남은 최종 시작 개수",len(start_centroid))
+print(start_centroid)
 
