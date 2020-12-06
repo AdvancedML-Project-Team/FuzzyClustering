@@ -138,7 +138,7 @@ def predict(df, K, m=2, maxiter=30, epsilon=0.01):
         row_sums = D.sum(axis=1)
         curr_U = D / row_sums[:, np.newaxis]
         change = max(np.linalg.norm(prev_U - curr_U, axis=1))
-        print('change : {}'.format(change))
+        print('U change : {}'.format(change))
         print()
         prev_U = curr_U
         it += 1
@@ -151,6 +151,8 @@ K = 2
 m = 2
 y_pred = predict(df, K=K, m=m)
 plt.scatter(df[:, 0], df[:, 1], c=y_pred)
+plt.figtext(.5,.9,'Fuzzy+Kernel clustering', fontsize=20, ha='center')
+plt.text(0.85, 1, s='d=2', fontsize=15)
 get_silhouette(df, K, y_pred)
 ###############################################################################
 

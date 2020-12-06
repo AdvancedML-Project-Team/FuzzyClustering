@@ -144,6 +144,7 @@ max_iter = 50
 y_pred, weight, curr_centroid = predict(df, K, epsilon=epsilon, max_iter=max_iter)
 
 plt.scatter(df[:, 0], df[:, 1], c=y_pred)  # 그림확인
+plt.figtext(.5,.9,'Fuzzy clustering', fontsize=20, ha='center')
 for k in range(K):  # centroid 그리기
     plt.scatter(curr_centroid[k][0], curr_centroid[k][1], s=100)
 ###############################################################################
